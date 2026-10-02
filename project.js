@@ -28,35 +28,41 @@ for(code in country)
 
         search.append(optionValue);
     }
-    search.addEventListener("change", (evt) =>
-    {
-       //heroSection(evt.target);
-        let countryCode = search.value;
-        let countryName = Object.keys(country).find(key => country[key] === countryCode);
-        heroSection({value: countryCode});
-        factsSection({value: countryCode});
-        //weatherSection({value: countryCode});
-        destinationSection({value: countryCode});
-        footerSection({value: countryCode});
-        cultureSection({value: countryCode});
-        festivalSection({value: countryCode});
-        religionSection({value: countryCode});
-        cuisineSection({value: countryCode});
-        InterestingFactsSection({value: countryCode});
-        travelTipsSection({value: countryCode});
-    });
-
-    // btn.addEventListener("click", () =>
+    // search.addEventListener("change", (evt) =>
     // {
-    //    let countryCode = search.value;
+    //    //heroSection(evt.target);
+    //     let countryCode = search.value;
     //     let countryName = Object.keys(country).find(key => country[key] === countryCode);
     //     heroSection({value: countryCode});
     //     factsSection({value: countryCode});
     //     //weatherSection({value: countryCode});
     //     destinationSection({value: countryCode});
     //     footerSection({value: countryCode});
-
+    //     cultureSection({value: countryCode});
+    //     festivalSection({value: countryCode});
+    //     religionSection({value: countryCode});
+    //     cuisineSection({value: countryCode});
+    //     InterestingFactsSection({value: countryCode});
+    //     travelTipsSection({value: countryCode});
     // });
+
+    btn.addEventListener("click", () =>
+    {
+       let countryCode = search.value;
+        let countryName = Object.keys(country).find(key => country[key] === countryCode);
+        heroSection({value: countryCode});
+        factsSection({value: countryCode});
+        //weatherSection({value: countryCode});
+        destinationSection({value: countryCode});
+        cultureSection({value: countryCode});
+        festivalSection({value: countryCode});
+        religionSection({value: countryCode});
+        cuisineSection({value: countryCode});
+        InterestingFactsSection({value: countryCode});
+        travelTipsSection({value: countryCode});
+        footerSection({value: countryCode});
+
+    });
 
     const heroSection = (event) => {
        // hero.style.backgroundImage =  `url("https://flagsapi.com/${event.value}/shiny/64.png")`;
