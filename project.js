@@ -28,10 +28,27 @@ for(code in country)
 
         search.append(optionValue);
     }
-    // search.addEventListener("change", (evt) =>
+    search.addEventListener("change", (evt) =>
+    {
+       //heroSection(evt.target);
+        let countryCode = search.value;
+        let countryName = Object.keys(country).find(key => country[key] === countryCode);
+        heroSection({value: countryCode});
+        factsSection({value: countryCode});
+        //weatherSection({value: countryCode});
+        destinationSection({value: countryCode});
+        footerSection({value: countryCode});
+        cultureSection({value: countryCode});
+        festivalSection({value: countryCode});
+        religionSection({value: countryCode});
+        cuisineSection({value: countryCode});
+        InterestingFactsSection({value: countryCode});
+        travelTipsSection({value: countryCode});
+    });
+
+    // btn.addEventListener("click", () =>
     // {
-    //    //heroSection(evt.target);
-    //     let countryCode = search.value;
+    //    let countryCode = search.value;
     //     let countryName = Object.keys(country).find(key => country[key] === countryCode);
     //     heroSection({value: countryCode});
     //     factsSection({value: countryCode});
@@ -40,18 +57,6 @@ for(code in country)
     //     footerSection({value: countryCode});
 
     // });
-
-    btn.addEventListener("click", () =>
-    {
-       let countryCode = search.value;
-        let countryName = Object.keys(country).find(key => country[key] === countryCode);
-        heroSection({value: countryCode});
-        factsSection({value: countryCode});
-        //weatherSection({value: countryCode});
-        //destinationSection({value: countryCode});
-        footerSection({value: countryCode});
-
-    });
 
     const heroSection = (event) => {
        // hero.style.backgroundImage =  `url("https://flagsapi.com/${event.value}/shiny/64.png")`;
@@ -67,32 +72,21 @@ for(code in country)
        let name = document.getElementById("countryName");
        name.innerText = countryName;
 
-       updateCaption(countryName, countryCode);
-       updateDescription(countryName, countryCode, countryDescription);
-       updateHero(countryName, countryCode);
+       let caption = document.getElementById("countryCaption");
+        let countryCaption = countryCaptions[countryName];
+        caption.innerText = countryCaption;
+
+        let countryDescription = document.getElementById("countryDescription");
+        let description = countryDescriptions[countryName];
+        countryDescription.innerText = description;
+
+        let hero = document.querySelector(".hero");
+        hero.style.backgroundImage =  `url("https://picsum.photos/seed/${countryName.toLowerCase()}/1920/700")`;
+        hero.style.backgroundSize = "100% 100%";
 
        let location = document.querySelector(".location");
        location.innerText = `📍 ${countryName}`;
     };
-
-    const updateCaption = (countryName, countryCode) => {
-        let caption = document.getElementById("countryCaption");
-        let countryCaption = countryCaptions[countryName];
-        //console.log(countryCaption);
-        caption.innerText = countryCaption;
-    }
-    
-    const updateDescription = (countryName, countryCode) => {
-        let countryDescription = document.getElementById("countryDescription");
-        let description = countryDescriptions[countryName];
-        countryDescription.innerText = description;
-    }
-
-    const updateHero = (countryName, countryCode) => {
-        let hero = document.querySelector(".hero");
-        hero.style.backgroundImage =  `url("https://picsum.photos/seed/${countryName.toLowerCase()}/1920/700")`;
-        hero.style.backgroundSize = "100% 100%";
-    }
 
     const factsSection = async (event) => {
         let countryCode=event.value;
@@ -102,6 +96,7 @@ for(code in country)
 
         const response = await fetch(`https://countries.dev/alpha/${countryCode}`);
         const data = await response.json();
+        //console.log(data);
 
         let capital = document.getElementById("capital");
         capital.innerText = data.capital;
@@ -122,6 +117,7 @@ for(code in country)
     const getCoordinates = async (capital, countryCode) => {
         const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${capital}&count=1`);
         const data = await response.json();
+    
         let latitude = data.results[0].latitude;
         let longitude = data.results[0].longitude;
         getWeather(latitude, longitude, countryCode);
@@ -195,51 +191,165 @@ for(code in country)
         return "Unpredictable Weather";
     }
 
-    destinationSection = async(event) => {
+     destinationSection = (event) => {
         let countryCode=event.value;
         let countryName = Object.keys(country).find(key => country[key] === countryCode);
 
         let destinationDescription = document.getElementById("destinationDescription");
         destinationDescription.innerText = `Must-visit places in ${countryName}`;
 
-    const response = await fetch(
-        `https://map.orizn.app/api/v1/spots?country=${countryCode}&limit=4`
-    );
+    // const response = await fetch(
+    //     `https://map.orizn.app/api/v1/spots?country=${countryCode}&limit=4`
+    // );
 
-    const data = await response.json();
+    // const data = await response.json();
 
-    console.log(data);
-    console.log(data.spots[0].name);
-        let place1img = document.getElementById("place1img");
-        place1img.src = data.spots[0].photos;
+    // console.log(data);
+    // console.log(data.spots[0].name);
+        // let place1img = document.getElementById("place1img");
+        // place1img.src = data.spots[0].photos;
         let place1name = document.getElementById("place1name");
-        place1name.innerText = data.spots[0].title;
+        place1name.innerText = touristPlaces[countryCode].destination[0];
         let place1description = document.getElementById("place1description");
-        place1description.innerText = data.spots[0].description;
+        place1description.innerText = touristPlaces[countryCode].description[0];
 
-        let place2img = document.getElementById("place2img");
-        place2img.src = data.spots[1].photos;
+        // let place2img = document.getElementById("place2img");
+        // place2img.src = data.spots[1].photos;
         let place2name = document.getElementById("place2name");
-        place2name.innerText = data.spots[1].title;
+        place2name.innerText = touristPlaces[countryCode].destination[1];
         let place2description = document.getElementById("place2description");
-        place2description.innerText = data.spots[1].description;
-
-        let place3img = document.getElementById("place3img");
-        place3img.src = data.spots[2].photos;
+        place2description.innerText = touristPlaces[countryCode].description[1];
+        
+        // let place3img = document.getElementById("place3img");
+        // place3img.src = data.spots[2].photos;
         let place3name = document.getElementById("place3name");
-        place3name.innerText = data.spots[2].title;
+        place3name.innerText = touristPlaces[countryCode].destination[2];
         let place3description = document.getElementById("place3description");
-        place3description.innerText = data.spots[2].description;
+        place3description.innerText = touristPlaces[countryCode].description[2];
 
-        let place4img = document.getElementById("place4img");
-        place4img.src = data.spots[3].photos;
+        // let place4img = document.getElementById("place4img");
+        // place4img.src = data.spots[3].photos;
         let place4name = document.getElementById("place4name");
-        place4name.innerText = data.spots[3].title;
+        place4name.innerText = touristPlaces[countryCode].destination[3];
         let place4description = document.getElementById("place4description");
-        place4description.innerText = data.spots[3].description;
+        place4description.innerText = touristPlaces[countryCode].description[3];
 
     }
 
+    const cultureSection = async (event) =>{
+       let countryCode=event.value;
+       let countryName = Object.keys(country).find(key => country[key] === countryCode);
+
+       let lifestyle = document.getElementById("lifestyle");
+       lifestyle.innerText = `Discover the traditions and lifestyle of ${countryName}`
+
+       const response = await fetch(`https://api.stungevents.com/events?country=${countryCode}&limit=4`);
+       const data = await response.json();
+       //console.log(data.events);
+
+       let element = document.getElementById("eventList");
+       element.innerText = `•${data.events[0].title}\n • ${data.events[1].title} `;
+    }
+
+    const festivalSection = (event) => {
+       let countryCode=event.value;
+       let countryName = Object.keys(country).find(key => country[key] === countryCode);
+        
+       let fest = document.getElementById("fest");
+       fest.innerText = `•${festivals[countryCode][0]}\n • ${festivals[countryCode][1]}\n •${festivals[countryCode][2]}\n • ${festivals[countryCode][3]} `;
+    }
+
+    const religionSection = (event) => {
+       let countryCode=event.value;
+       let countryName = Object.keys(country).find(key => country[key] === countryCode);
+
+       let religion = document.getElementById("religion");
+       religion.innerText = `•${religions[countryCode][0]}\n • ${religions[countryCode][1]}\n •${religions[countryCode][2]}`;
+    }
+
+    const cuisineSection = (event) => {
+       let countryCode=event.value;
+       let countryName = Object.keys(country).find(key => country[key] === countryCode);
+
+       let cuisine = document.getElementById("cuisine");
+       cuisine.innerText = `•${cuisines[countryCode][0]}\n • ${cuisines[countryCode][1]}\n •${cuisines[countryCode][2]}\n • ${cuisines[countryCode][3]} `;
+    }
+
+    const InterestingFactsSection = async (event) => {
+       let countryCode=event.value;
+       let countryName = Object.keys(country).find(key => country[key] === countryCode);
+
+       let interestingFacts = document.getElementById("interestingFacts");
+       interestingFacts.innerText = `Interesting facts about ${countryName}`;
+
+       const query = `
+        SELECT ?item ?itemLabel ?description WHERE {
+
+            ?country wdt:P297 "${countryCode}".
+
+            ?item wdt:P17 ?country;
+                  schema:description ?description.
+
+            FILTER(LANG(?description) = "en")
+
+            SERVICE wikibase:label {
+                bd:serviceParam wikibase:language "en".
+            }
+        }
+
+        LIMIT 4
+    `;
+
+    const url ="https://query.wikidata.org/sparql?format=json&query=" +encodeURIComponent(query);
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const facts = data.results.bindings;
+   // console.log(facts);
+    let fact1Name = document.getElementById("fact1Name");
+    fact1Name.innerText = `🗻 ${facts[0].itemLabel.value}`;
+    let fact1Description = document.getElementById("fact1Description");
+    fact1Description.innerText = facts[0].description.value;
+
+    let fact2Name = document.getElementById("fact2Name");
+    fact2Name.innerText = `🌸 ${facts[1].itemLabel.value}`;
+    let fact2Description = document.getElementById("fact2Description");
+    fact2Description.innerText = facts[1].description.value;
+
+    let fact3Name = document.getElementById("fact3Name");
+    fact3Name.innerText = `🚄 ${facts[2].itemLabel.value}`;
+    let fact3Description = document.getElementById("fact3Description");
+    fact3Description.innerText = facts[2].description.value;
+
+    let fact4Name = document.getElementById("fact4Name");
+    fact4Name.innerText = `🍣 ${facts[3].itemLabel.value}`;
+    let fact4Description = document.getElementById("fact4Description");
+    fact4Description.innerText = facts[3].description.value;
+    }
+
+    const travelTipsSection = (event) => {
+        let countryCode=event.value;
+        let countryName = Object.keys(country).find(key => country[key] === countryCode);
+
+        let travelTips = document.getElementById("travelTips");
+        travelTips.innerText = `Make the most of your trip to ${countryName}`;
+
+        let bestTime = document.getElementById("bestTime");
+        bestTime.innerText = travelTipsData[countryCode].bestTime;
+
+        let visa = document.getElementById("visa");
+        visa.innerText = travelTipsData[countryCode].visa;
+
+        let safety = document.getElementById("safety");
+        safety.innerText = travelTipsData[countryCode].safety;
+
+        let budget = document.getElementById("budget");
+        budget.innerText = travelTipsData[countryCode].budget;
+
+        let transport = document.getElementById("transport");
+        transport.innerText = travelTipsData[countryCode].transport;
+    }
     const footerSection = (event) => {
         let countryCode=event.value;
         let countryName = Object.keys(country).find(key => country[key] === countryCode);
